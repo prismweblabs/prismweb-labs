@@ -1,0 +1,24 @@
+/* Splash loader: three squares that slide and stretch (prefixed pw-) */
+.pw-loader { position: relative; width: 112px; height: 112px; }
+.pw-box1, .pw-box2, .pw-box3 { border: 16px solid #f5f5f5; box-sizing: border-box; position: absolute; display: block; }
+.pw-box1 { width: 112px; height: 48px; margin-top: 64px; margin-left: 0; animation: pw-abox1 4s 1s forwards ease-in-out infinite; }
+.pw-box2 { width: 48px; height: 48px; margin-top: 0; margin-left: 0; animation: pw-abox2 4s 1s forwards ease-in-out infinite; }
+.pw-box3 { width: 48px; height: 48px; margin-top: 0; margin-left: 64px; animation: pw-abox3 4s 1s forwards ease-in-out infinite; }
+
+@keyframes pw-abox1 {
+  0% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0; }
+  12.5%, 25%, 37.5%, 50%, 62.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0; }
+  75% { width: 48px; height: 112px; margin-top: 0; margin-left: 0; }
+  87.5%, 100% { width: 48px; height: 48px; margin-top: 0; margin-left: 0; }
+}
+@keyframes pw-abox2 {
+  0%, 12.5%, 25%, 37.5% { width: 48px; height: 48px; margin-top: 0; margin-left: 0; }
+  50% { width: 112px; height: 48px; margin-top: 0; margin-left: 0; }
+  62.5%, 75%, 87.5%, 100% { width: 48px; height: 48px; margin-top: 0; margin-left: 64px; }
+}
+@keyframes pw-abox3 {
+  0%, 12.5% { width: 48px; height: 48px; margin-top: 0; margin-left: 64px; }
+  25% { width: 48px; height: 112px; margin-top: 0; margin-left: 64px; }
+  37.5%, 50%, 62.5%, 75%, 87.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+  100% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0; }
+}

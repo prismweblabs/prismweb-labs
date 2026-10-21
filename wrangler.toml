@@ -1,0 +1,8 @@
+name = "prismweb-labs"
+compatibility_date = "2026-10-01"
+pages_build_output_dir = "out"
+
+# After creating a KV namespace in Cloudflare, paste its id here (or bind it in the dashboard instead).
+# [[kv_namespaces]]
+# binding = "PRISM_KV"
+# id = "YOUR_KV_NAMESPACE_ID"
