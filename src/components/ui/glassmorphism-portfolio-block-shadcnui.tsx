@@ -6,6 +6,7 @@ import { motion, Variants } from "framer-motion";
 import { ArrowUpRight, Mail } from "lucide-react";
 import Image from "next/image";
 import { site, developers as team } from "@/data/site";
+import { gmailLink } from "@/lib/mail";
 
 type Highlight = { title: string; description: string };
 
@@ -152,7 +153,9 @@ export function GlassmorphismPortfolioBlock() {
                 </motion.div>
 
                 <a
-                  href={`mailto:${site.email}`}
+                  href={gmailLink(site.email)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group mt-8 flex items-center justify-between rounded-2xl border border-border/40 bg-background/70 px-4 py-3 transition-all hover:-translate-y-0.5 hover:border-border/60"
                 >
                   <span className="flex items-center gap-3 text-sm text-foreground/80">

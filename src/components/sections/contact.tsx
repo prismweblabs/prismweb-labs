@@ -1,6 +1,7 @@
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
+import { gmailLink } from "@/lib/mail";
 
 const field =
   "w-full rounded-xl border border-input bg-background/60 px-4 py-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring";
@@ -16,7 +17,7 @@ export function Contact() {
           <p className="text-muted-foreground">
             Tell us your name, your email and about your website. We will reply with a plan and a quote.
           </p>
-          <a href={`mailto:${site.email}`} className="inline-flex items-center gap-3 break-all text-sm text-muted-foreground hover:text-foreground">
+          <a href={gmailLink(site.email)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 break-all text-sm text-muted-foreground hover:text-foreground">
             <Mail className="h-4 w-4 shrink-0" />
             {site.email}
           </a>

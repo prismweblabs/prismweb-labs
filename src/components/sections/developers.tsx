@@ -7,6 +7,7 @@ import { Mail, Phone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { SocialCard } from "@/components/social-card";
 import { developers, type Developer } from "@/data/site";
+import { gmailLink } from "@/lib/mail";
 
 function whatsappLink(phone: string) {
   return `https://wa.me/${phone.replace(/\D/g, "")}`;
@@ -63,7 +64,7 @@ function DeveloperSection({ dev, index }: { dev: Developer; index: number }) {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <a href={`mailto:${dev.email}`} className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-background/60 px-4 py-3 text-sm transition-colors hover:border-white/30">
+          <a href={gmailLink(dev.email)} target="_blank" rel="noopener noreferrer" className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-background/60 px-4 py-3 text-sm transition-colors hover:border-white/30">
             <Mail className="h-4 w-4 text-muted-foreground" />
             <span className="truncate">{dev.email}</span>
           </a>
