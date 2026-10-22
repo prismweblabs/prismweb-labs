@@ -7,7 +7,8 @@
 export interface Env {
   PRISM_KV: KVNamespace;
   ADMIN_PASSWORD?: string;
-  WEB3FORMS_KEY?: string; // optional: forward form messages to your email via web3forms.com (free)
+  RESEND_API_KEY?: string; // optional: email form messages to you via resend.com (free)
+  NOTIFY_EMAIL?: string; // optional: where to send them (default prismweblabs@gmail.com)
 }
 
 // Minimal KV typings so we don't need extra packages
@@ -73,14 +74,22 @@ export async function handle(req: Request, env: Env): Promise<Response> {
     form.forEach((v, k) => { if (k !== "bot-field" && typeof v === "string") data[k] = v.slice(0, 5000); });
     const kind = data["form-name"] || "contact";
     await kv.put(`msg:${Date.now()}`, JSON.stringify({ ...data, kind, at: new Date().toISOString() }));
-    if (env.WEB3FORMS_KEY) {
+    if (env.RESEND_API_KEY) {
       try {
-        await fetch("https://api.web3forms.com/submit", {
+        const lines = Object.entries(data).filter(([k]) => k !== "form-name").map(([k, v]) => `${k}: ${v}`).join("\n");
+        const r = await fetch("https://api.resend.com/emails", {
           method: "POST",
-          headers: { "content-type": "application/json", accept: "application/json" },
-          body: JSON.stringify({ access_key: env.WEB3FORMS_KEY, subject: `PrismWeb Labs: new ${kind}`, ...data }),
+          headers: { "content-type": "application/json", authorization: `Bearer ${env.RESEND_API_KEY}` },
+          body: JSON.stringify({
+            from: "PrismWeb Labs <onboarding@resend.dev>",
+            to: [env.NOTIFY_EMAIL || "prismweblabs@gmail.com"],
+            ...(data.email ? { reply_to: data.email } : {}),
+            subject: `PrismWeb Labs: new ${kind}`,
+            text: lines,
+          }),
         });
-      } catch {}
+        if (!r.ok) await kv.put(`err:${Date.now()}`, `Resend ${r.status}: ${(await r.text()).slice(0, 500)}`);
+      } catch (e) { await kv.put(`err:${Date.now()}`, String(e)); }
     }
     return Response.redirect(`${url.origin}/thanks.html`, 303);
   }
