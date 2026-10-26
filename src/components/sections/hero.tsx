@@ -17,11 +17,12 @@ function HexIcon() {
     </svg>
   );
 }
-function PrismIcon() {
+function CustomHexIcon() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <polygon points="50,6 94,88 6,88" fill="url(#hxg)" opacity=".92" />
-      <polygon points="50,6 50,88 6,88" fill="rgba(255,255,255,.2)" />
+      <polygon points="26,8 74,8 98,50 74,92 26,92 2,50" fill="url(#hxg)" opacity=".92" />
+      <polygon points="35,26 65,26 80,50 65,74 35,74 20,50" fill="rgba(255,255,255,.25)" />
+      <polygon points="42,38 58,38 66,50 58,62 42,62 34,50" fill="rgba(4,19,10,.55)" />
     </svg>
   );
 }
@@ -146,18 +147,25 @@ export function Hero() {
                 onClick={() => setPanel("custom")}
                 aria-pressed={panel === "custom"}
               >
-                <span className="ic"><PrismIcon /></span>
+                <span className="ic"><CustomHexIcon /></span>
                 <span>Custom build</span>
                 <span>Made for you</span>
               </button>
             </div>
 
             {panel === "ready" ? (
-              <a href="/projects" className={`${pillBtn} hx-led`}>
-                <span className="hx-led-dot" aria-hidden="true" />
-                Browse projects
-                <PillArrow />
-              </a>
+              <div className="hx-custom" role="region" aria-label="Ready-made websites">
+                <h3>Ready-made websites</h3>
+                <p>
+                  Open a live demo, pick the website you like and buy it. Go and visit our Projects section to see
+                  everything we have built.
+                </p>
+                <a href="/projects" className={`${pillBtn} hx-led`}>
+                  <span className="hx-led-dot" aria-hidden="true" />
+                  Browse projects
+                  <PillArrow />
+                </a>
+              </div>
             ) : (
               <div className="hx-custom" role="region" aria-label="Custom websites">
                 <h3>Need something custom?</h3>

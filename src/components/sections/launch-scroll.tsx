@@ -93,10 +93,10 @@ export function LaunchScroll() {
           className="pointer-events-none absolute inset-x-0 top-[24%] px-4 text-center md:top-[28%]"
           style={{ opacity: 0 }}
         >
-          <h2 className="text-4xl font-bold uppercase text-white [text-shadow:0_4px_40px_rgb(0_0_0/0.5)] md:text-7xl" style={{ marginRight: "-0.24em" }}>
+          <h2 className="text-4xl font-black uppercase text-white [-webkit-text-stroke:0.09em_#000] [paint-order:stroke_fill] [text-shadow:0_4px_30px_rgb(0_0_0/0.7)] md:text-7xl" style={{ marginRight: "-0.24em" }}>
             Launch
           </h2>
-          <p className="mt-4 text-xs uppercase tracking-[0.3em] text-white/70">Your idea. A live website.</p>
+          <p className="mt-4 text-xs font-extrabold uppercase tracking-[0.3em] text-white [-webkit-text-stroke:4px_#000] [paint-order:stroke_fill] [text-shadow:0_2px_16px_rgb(0_0_0/0.8)] md:text-sm">Your idea. A live website.</p>
         </div>
         {ORDER.slice(3).map(layer)}
         <p ref={hintRef} className="pointer-events-none absolute bottom-6 left-0 right-0 text-center text-[0.65rem] uppercase tracking-[0.3em] text-white/50">
