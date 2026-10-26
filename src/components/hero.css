@@ -67,3 +67,6 @@
 /* WebGL planet (sits behind the hero; the star background shows through everywhere else) */
 .hx-planet { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:0; transition:opacity 1.4s ease; -webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent 100%); mask-image:linear-gradient(to bottom,#000 80%,transparent 100%); }
 .hx-planet.on { opacity:1; }
+
+/* smaller left headline so three lines fit beside the logo */
+.hx-title.hx-title-sm { font-size:clamp(3rem, 6.4vw, 7.2rem); line-height:.9; }
