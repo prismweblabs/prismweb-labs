@@ -2,66 +2,48 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowUpRight, Layers } from "lucide-react";
+import { ArrowUpRight, Check, Layers } from "lucide-react";
 import { Galada } from "next/font/google";
 import "@/components/hero.css";
 import { site } from "@/data/site";
 
 const galada = Galada({ weight: "400", subsets: ["latin"], display: "swap" });
 
-type Variant = "hex" | "prism" | "orb";
-type Shape = { layer: "fg" | "bg"; v: Variant; size: number; top: number; left: number; op: number; dur: number };
-
-// size in px, top/left in %
-const SHAPES: Shape[] = [
-  { layer: "fg", v: "hex", size: 150, top: 24, left: 30, op: 1, dur: 5 },
-  { layer: "fg", v: "prism", size: 90, top: 62, left: 42, op: 1, dur: 7 },
-  { layer: "fg", v: "orb", size: 170, top: 28, left: 64, op: 1, dur: 6 },
-  { layer: "fg", v: "prism", size: 110, top: 14, left: 48, op: 1, dur: 8 },
-  { layer: "fg", v: "hex", size: 100, top: 74, left: 22, op: 1, dur: 5.5 },
-  { layer: "fg", v: "orb", size: 130, top: 46, left: 74, op: 1, dur: 6.5 },
-  { layer: "bg", v: "hex", size: 70, top: 14, left: 40, op: 0.7, dur: 9 },
-  { layer: "bg", v: "prism", size: 64, top: 50, left: 55, op: 0.6, dur: 11 },
-  { layer: "bg", v: "orb", size: 70, top: 80, left: 35, op: 0.7, dur: 10 },
-];
-
-function ShapeSvg({ v }: { v: Variant }) {
-  if (v === "hex")
-    return (
-      <svg viewBox="0 0 100 100" aria-hidden="true">
-        <polygon points="50,4 91,27 91,73 50,96 9,73 9,27" fill="url(#hxg)" opacity=".9" />
-        <polygon points="50,24 73,37 73,63 50,76 27,63 27,37" fill="rgba(255,255,255,.22)" />
-      </svg>
-    );
-  if (v === "prism")
-    return (
-      <svg viewBox="0 0 100 100" aria-hidden="true">
-        <polygon points="50,6 94,88 6,88" fill="url(#hxg)" opacity=".92" />
-        <polygon points="50,6 50,88 6,88" fill="rgba(255,255,255,.2)" />
-      </svg>
-    );
+function HexIcon() {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="44" fill="url(#hxg)" opacity=".9" />
-      <ellipse cx="36" cy="32" rx="14" ry="9" fill="rgba(255,255,255,.35)" />
+      <polygon points="50,4 91,27 91,73 50,96 9,73 9,27" fill="url(#hxg)" opacity=".9" />
+      <polygon points="50,24 73,37 73,63 50,76 27,63 27,37" fill="rgba(255,255,255,.22)" />
+    </svg>
+  );
+}
+function PrismIcon() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <polygon points="50,6 94,88 6,88" fill="url(#hxg)" opacity=".92" />
+      <polygon points="50,6 50,88 6,88" fill="rgba(255,255,255,.2)" />
     </svg>
   );
 }
 
-const CARDS = [
-  { id: "green", title: "Ready-made sites", sub: "Live demos to buy", v: "hex" as Variant, href: "/projects", more: "Browse projects" },
-  { id: "blue", title: "Custom build", sub: "Designed for you", v: "prism" as Variant, href: "#contact", more: "Get a quote" },
-];
+const pillBtn =
+  "group relative isolate z-10 flex w-fit items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-gray-50 bg-gray-50 px-4 py-2 text-lg text-gray-900 shadow-xl backdrop-blur-md transition-colors duration-500 before:absolute before:-left-full before:-z-10 before:aspect-square before:w-full before:rounded-full before:bg-emerald-500 before:transition-all before:duration-700 hover:text-gray-50 hover:before:left-0 hover:before:scale-150 lg:font-semibold";
+const pillArrow =
+  "h-8 w-8 rotate-45 justify-end rounded-full border border-gray-700 p-2 text-gray-50 duration-300 ease-linear group-hover:rotate-90 group-hover:border-none group-hover:bg-gray-50";
+const ARROW_PATH =
+  "M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z";
+
+function PillArrow() {
+  return (
+    <svg className={pillArrow} viewBox="0 0 16 19" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d={ARROW_PATH} className="fill-gray-800 group-hover:fill-gray-800" />
+    </svg>
+  );
+}
 
 export function Hero() {
-  const [theme, setTheme] = useState<"green" | "blue">("green");
-  const [bubbles, setBubbles] = useState<{ left: number; size: number; dur: number; delay: number; o: number }[]>([]);
+  const [panel, setPanel] = useState<"ready" | "custom">("ready");
   const root = useRef<HTMLElement>(null);
-  const fg = useRef<HTMLDivElement>(null);
-  const bg = useRef<HTMLDivElement>(null);
-  const logo = useRef<HTMLDivElement>(null);
-  const shapeEls = useRef<(HTMLDivElement | null)[]>([]);
-  const switchRef = useRef<(() => void) | null>(null);
   const planetCanvas = useRef<HTMLCanvasElement>(null);
   const [planet, setPlanet] = useState<"loading" | "on" | "off">("loading");
 
@@ -93,144 +75,8 @@ export function Hero() {
     return () => { cancelled = true; stop?.(); };
   }, []);
 
-  useEffect(() => {
-    setBubbles(
-      Array.from({ length: 16 }, () => ({
-        left: Math.random() * 100,
-        size: 10 + Math.random() * 20,
-        dur: 8 + Math.random() * 8,
-        delay: -Math.random() * 14,
-        o: 0.25 + Math.random() * 0.35,
-      }))
-    );
-  }, []);
-
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const mouse = { x: 0, y: 0, px: -9999, py: -9999 };
-    const cur = { x: 0, y: 0 };
-    const spin = { v: 0, target: 0 };
-    let switching = false;
-    let visible = true;
-    let raf = 0;
-
-    const st = SHAPES.map(() => ({
-      rx: 0, ry: 0, angle: Math.random() * 360,
-      bx: 0, by: 0, s: 1, o: 1, tbx: 0, tby: 0, ts: 1, to: 1,
-    }));
-
-    const onMove = (e: PointerEvent) => {
-      mouse.x = e.clientX / window.innerWidth - 0.5;
-      mouse.y = e.clientY / window.innerHeight - 0.5;
-      mouse.px = e.clientX;
-      mouse.py = e.clientY;
-    };
-    window.addEventListener("pointermove", onMove);
-
-    const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; });
-    if (root.current) io.observe(root.current);
-
-    switchRef.current = () => {
-      if (switching || reduce) return;
-      switching = true;
-      spin.target += 720;
-      const host = root.current;
-      const hr = host?.getBoundingClientRect();
-      st.forEach((s, i) => {
-        const el = shapeEls.current[i];
-        if (!el || !hr) return;
-        // implode toward the center of the hero
-        s.tbx = hr.width / 2 - el.offsetLeft - el.offsetWidth / 2;
-        s.tby = hr.height / 2 - el.offsetTop - el.offsetHeight / 2;
-        s.ts = 0.1; s.to = 0;
-      });
-      setTimeout(() => {
-        st.forEach((s, i) => {
-          s.tbx = (Math.random() - 0.5) * 200;
-          s.tby = (Math.random() - 0.5) * 200;
-          s.ts = 1; s.to = SHAPES[i].op;
-        });
-      }, 800);
-      setTimeout(() => { switching = false; }, 1700);
-    };
-
-    const loop = () => {
-      raf = requestAnimationFrame(loop);
-      if (!visible || reduce) return;
-      const t = Date.now() * 0.001;
-      cur.x += (mouse.x - cur.x) * 0.05;
-      cur.y += (mouse.y - cur.y) * 0.05;
-      spin.v += (spin.target - spin.v) * 0.045;
-      const blur = Math.min(12, Math.abs(spin.target - spin.v) / 40);
-
-      if (logo.current) {
-        logo.current.style.transform = `rotateY(${cur.x * 40 + spin.v}deg) rotateX(${-cur.y * 24}deg)`;
-        logo.current.style.filter = blur > 0.3 ? `blur(${blur}px)` : "none";
-      }
-      if (fg.current) fg.current.style.transform = `translate(${cur.x * 60}px, ${cur.y * 60}px)`;
-      if (bg.current) bg.current.style.transform = `translate(${cur.x * -30}px, ${cur.y * -30}px)`;
-
-      shapeEls.current.forEach((el, i) => {
-        if (!el) return;
-        const s = st[i];
-        const r = el.getBoundingClientRect();
-        const dx = mouse.px - (r.left + r.width / 2);
-        const dy = mouse.py - (r.top + r.height / 2);
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        let trx = 0, try_ = 0, mult = 1;
-        if (!switching && dist < 400) {
-          const force = (400 - dist) / 400;
-          trx = (dx / dist) * force * -80;
-          try_ = (dy / dist) * force * -80;
-          mult = 1 + force * 5;
-        }
-        s.rx += (trx - s.rx) * 0.1;
-        s.ry += (try_ - s.ry) * 0.1;
-        s.angle += 0.2 * mult;
-        s.bx += (s.tbx - s.bx) * 0.09;
-        s.by += (s.tby - s.by) * 0.09;
-        s.s += (s.ts - s.s) * 0.09;
-        s.o += (s.to - s.o) * 0.09;
-        const phase = (t + i * 0.7) * ((Math.PI * 2) / SHAPES[i].dur);
-        const fy = Math.sin(phase) * 15;
-        const fa = Math.cos(phase) * 6;
-        el.style.transform = `translate(${s.rx + s.bx}px, ${s.ry + s.by + fy}px) rotate(${s.angle + fa}deg) scale(${s.s})`;
-        el.style.opacity = String(Math.max(0, s.o));
-      });
-    };
-    st.forEach((s, i) => { s.o = SHAPES[i].op; s.to = SHAPES[i].op; });
-    loop();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      io.disconnect();
-      window.removeEventListener("pointermove", onMove);
-    };
-  }, []);
-
-  const active = CARDS.find((c) => c.id === theme)!;
-  const pick = (id: "green" | "blue") => {
-    if (id === theme) return;
-    setTheme(id);
-    switchRef.current?.();
-  };
-
-  const renderShapes = (layer: "fg" | "bg") =>
-    SHAPES.map((s, i) =>
-      s.layer !== layer ? null : (
-        <div
-          key={i}
-          ref={(el) => { shapeEls.current[i] = el; }}
-          className="hx-shape"
-          style={{ width: s.size, height: s.size, top: `${s.top}%`, left: `${s.left}%`, opacity: s.op }}
-        >
-          <ShapeSvg v={s.v} />
-        </div>
-      )
-    );
-
   return (
-    <section id="home" ref={root} data-theme={theme} className="hx">
+    <section id="home" ref={root} className="hx">
       <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
         <defs>
           <linearGradient id="hxg" x1="0" y1="0" x2="1" y2="1">
@@ -241,25 +87,12 @@ export function Hero() {
       </svg>
       {planet !== "off" && <canvas ref={planetCanvas} className={`hx-planet ${planet === "on" ? "on" : ""}`} aria-hidden="true" />}
       <div className="hx-glow" aria-hidden="true" />
-      <div className="hx-bubbles" aria-hidden="true">
-        {bubbles.map((b, i) => (
-          <span
-            key={i}
-            className="hx-bubble"
-            style={{ left: `${b.left}%`, width: b.size, height: b.size, animationDuration: `${b.dur}s`, animationDelay: `${b.delay}s`, "--o": b.o } as React.CSSProperties}
-          />
-        ))}
-      </div>
-
-      <div ref={bg} className="hx-layer bg" aria-hidden="true">{renderShapes("bg")}</div>
 
       <div className="hx-center" aria-hidden="true">
-        <div className="hx-bob">
-          <div ref={logo} className="hx-logo">
-            <div className="hx-hex">
-              <div>
-                <Image src="/logo.webp" alt="" width={260} height={260} priority />
-              </div>
+        <div className="hx-logo">
+          <div className="hx-hex">
+            <div>
+              <Image src="/logo.webp" alt="" width={260} height={260} priority />
             </div>
           </div>
         </div>
@@ -297,37 +130,53 @@ export function Hero() {
         <div className="hx-right">
           <div className="hx-carousel">
             <div className="hx-cards">
-              {CARDS.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  className={`hx-card ${theme === c.id ? "active" : ""}`}
-                  onClick={() => pick(c.id as "green" | "blue")}
-                  aria-pressed={theme === c.id}
-                >
-                  <span className="ic"><ShapeSvg v={c.v} /></span>
-                  <span>{c.title}</span>
-                  <span>{c.sub}</span>
-                </button>
-              ))}
-            </div>
-            <a
-              href={active.href}
-              className="group relative isolate z-10 flex w-fit items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-gray-50 bg-gray-50 px-4 py-2 text-lg text-gray-900 shadow-xl backdrop-blur-md transition-colors duration-500 before:absolute before:-left-full before:-z-10 before:aspect-square before:w-full before:rounded-full before:bg-emerald-500 before:transition-all before:duration-700 group-hover:before:left-0 hover:text-gray-50 hover:before:left-0 hover:before:scale-150 lg:font-semibold"
-            >
-              {active.more}
-              <svg
-                className="h-8 w-8 rotate-45 justify-end rounded-full border border-gray-700 p-2 text-gray-50 duration-300 ease-linear group-hover:rotate-90 group-hover:border-none group-hover:bg-gray-50"
-                viewBox="0 0 16 19"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+              <button
+                type="button"
+                className={`hx-card ${panel === "ready" ? "active" : ""}`}
+                onClick={() => setPanel("ready")}
+                aria-pressed={panel === "ready"}
               >
-                <path
-                  d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
-                  className="fill-gray-800 group-hover:fill-gray-800"
-                />
-              </svg>
-            </a>
+                <span className="ic"><HexIcon /></span>
+                <span>Ready-made sites</span>
+                <span>Live demos to buy</span>
+              </button>
+              <button
+                type="button"
+                className={`hx-card ${panel === "custom" ? "active" : ""}`}
+                onClick={() => setPanel("custom")}
+                aria-pressed={panel === "custom"}
+              >
+                <span className="ic"><PrismIcon /></span>
+                <span>Custom build</span>
+                <span>Made for you</span>
+              </button>
+            </div>
+
+            {panel === "ready" ? (
+              <a href="/projects" className={`${pillBtn} hx-led`}>
+                <span className="hx-led-dot" aria-hidden="true" />
+                Browse projects
+                <PillArrow />
+              </a>
+            ) : (
+              <div className="hx-custom" role="region" aria-label="Custom websites">
+                <h3>Need something custom?</h3>
+                <p>
+                  On request, we build websites to your needs too. Tell us what you want, change anything you like,
+                  and choose how many days you need. We take care of everything, fast.
+                </p>
+                <ul>
+                  <li><Check className="h-4 w-4" /> Built around your idea</li>
+                  <li><Check className="h-4 w-4" /> Changes made the way you want</li>
+                  <li><Check className="h-4 w-4" /> You choose the number of days</li>
+                  <li><Check className="h-4 w-4" /> We handle everything, fast</li>
+                </ul>
+                <a href="#contact" className={pillBtn}>
+                  Get a quote
+                  <PillArrow />
+                </a>
+              </div>
+            )}
           </div>
           <h2 className={`hx-title ${galada.className}`}>
             <span>Clean</span>
@@ -336,8 +185,6 @@ export function Hero() {
           </h2>
         </div>
       </div>
-
-      <div ref={fg} className="hx-layer fg" aria-hidden="true">{renderShapes("fg")}</div>
     </section>
   );
 }
