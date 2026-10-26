@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import "@/components/projects.css";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AdminPanel } from "@/components/sections/admin-panel";
 
 type Project = { slug: string; title: string; description: string; price: number; createdAt: number };
@@ -13,6 +14,8 @@ export function ProjectsView() {
   const [failed, setFailed] = useState(false);
   const [buying, setBuying] = useState<Project | null>(null);
   const [owner, setOwner] = useState(false);
+  const [buyMsg, setBuyMsg] = useState<{ ok: boolean; t: string } | null>(null);
+  const [sending, setSending] = useState(false);
 
   const load = useCallback(() => {
     fetch("/api/projects")
@@ -21,6 +24,26 @@ export function ProjectsView() {
       .catch(() => setFailed(true));
   }, []);
   useEffect(() => { load(); }, [load]);
+  useEffect(() => { setBuyMsg(null); setSending(false); }, [buying]);
+
+  async function submitBuy(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const email = String(fd.get("email") || "").trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setBuyMsg({ ok: false, t: "Please enter a valid email address." });
+    setSending(true); setBuyMsg(null);
+    try {
+      const res = await fetch("/api/contact", { method: "POST", body: fd });
+      if (!res.ok) throw new Error();
+      setBuyMsg({ ok: true, t: "Thank you! Your buy request was sent. We will contact you soon." });
+      form.reset();
+      setTimeout(() => setBuying(null), 3000);
+    } catch {
+      setBuyMsg({ ok: false, t: "Sorry, it could not be sent. Please try again in a moment." });
+    }
+    setSending(false);
+  }
 
   return (
     <div className="pw-pg">
@@ -32,6 +55,7 @@ export function ProjectsView() {
         </a>
       </div>
 
+      <Breadcrumbs items={[{ name: "Projects", href: "/projects" }]} />
       <h1>Our <span className="text-gradient">Projects</span></h1>
       <p className="lead">Live websites made by our team. Open a demo in a new tab to try it, then buy the one you want.</p>
 
@@ -77,7 +101,7 @@ export function ProjectsView() {
           <div className="box" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <h2>Buy “{buying.title}”</h2>
             <p className="sub">Price: {buying.price ? inr(buying.price) : "to be discussed"}. Leave your Gmail and we will contact you.</p>
-            <form name="buy-request" method="POST" action="/api/contact">
+            <form name="buy-request" method="POST" action="/api/contact" onSubmit={submitBuy} noValidate>
               <input type="hidden" name="form-name" value="buy-request" />
               <input type="hidden" name="project" value={buying.title} />
               <input type="hidden" name="price" value={buying.price ? inr(buying.price) : "not set"} />
@@ -93,8 +117,9 @@ export function ProjectsView() {
               </label>
               <div className="pw-actions">
                 <button type="button" className="pw-ghost" onClick={() => setBuying(null)}>Cancel</button>
-                <button type="submit" className="pw-go">Send buy request</button>
+                <button type="submit" className="pw-go" disabled={sending}>{sending ? "Sending…" : "Send buy request"}</button>
               </div>
+              {buyMsg && <p className={buyMsg.ok ? "pw-ok" : "pw-err"} role="alert">{buyMsg.t}</p>}
             </form>
           </div>
         </div>

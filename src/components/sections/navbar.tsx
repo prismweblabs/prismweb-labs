@@ -12,13 +12,13 @@ export function Navbar() {
       <div className="relative w-full max-w-4xl">
         <nav className="flex items-center justify-between gap-4 rounded-full border border-border bg-background/70 py-2 pl-3 pr-2 backdrop-blur-xl">
           <a href="#home" className="flex items-center gap-2" aria-label={site.name}>
-            <Image src="/logo.jpg" alt={`${site.name} logo`} width={36} height={36} className="h-9 w-9 rounded-full bg-white object-contain p-0.5" />
+            <Image src="/logo.webp" alt={`${site.name} logo`} width={36} height={36} className="h-9 w-9 rounded-full bg-white object-contain p-0.5" />
             <span className="hidden text-sm font-semibold sm:block">{site.name}</span>
           </a>
-          <ul className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
+          <ul className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href} className="transition-colors hover:text-foreground">{n.label}</a>
+                <a href={n.href} className="rounded-full px-3 py-1.5 transition-colors hover:bg-[#fbcfe8] hover:text-[#011d17]">{n.label}</a>
               </li>
             ))}
           </ul>

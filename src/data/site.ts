@@ -3,6 +3,12 @@ export const site = {
   name: "PrismWeb Labs",
   tagline: "We design, build and launch websites for your business.",
   email: "prismweblabs@gmail.com",
+  // Your live address. Change it when you connect a custom domain.
+  url: "https://prismweb-labs.pages.dev",
+  // Paste your Google Analytics ID here (looks like "G-XXXXXXXXXX"). Leave "" to turn analytics off.
+  gaId: "",
+  // Paste the Google Search Console HTML-tag verification code here (only the content value). Leave "" if not needed.
+  searchConsole: "",
 };
 
 export type Developer = {

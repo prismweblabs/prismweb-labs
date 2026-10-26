@@ -1,10 +1,7 @@
 import { Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ContactForm } from "@/components/contact-form";
 import { site } from "@/data/site";
 import { gmailLink } from "@/lib/mail";
-
-const field =
-  "w-full rounded-xl border border-input bg-background/60 px-4 py-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring";
 
 export function Contact() {
   return (
@@ -23,27 +20,7 @@ export function Contact() {
           </a>
         </div>
 
-        {/* Plain HTML form: posts to the Cloudflare Pages Function at /api/contact. */}
-        <form
-          name="contact"
-          method="POST"
-          action="/api/contact"
-          className="min-w-0 space-y-4"
-        >
-          <input type="hidden" name="form-name" value="contact" />
-          <p className="hidden">
-            <label>
-              Don&apos;t fill this out: <input name="bot-field" />
-            </label>
-          </p>
-          <input name="name" required placeholder="Your name" autoComplete="name" className={field} />
-          <input name="email" type="email" required placeholder="Your email" autoComplete="email" className={field} />
-          <input name="website" placeholder="Your website (link, if you have one)" className={field} />
-          <textarea name="message" required rows={5} placeholder="Tell us about your website: what you need, your idea, timeline" className={field} />
-          <Button type="submit" size="lg" variant="light" className="h-12 w-full rounded-full">
-            Send message
-          </Button>
-        </form>
+        <ContactForm />
       </div>
     </section>
   );

@@ -98,3 +98,6 @@ html.lenis, html.lenis body { height: auto; }
 }
 .sweep-btn:hover::before { transform: scaleX(1); }
 .sweep-btn > span { position: relative; z-index: 1; }
+
+/* Mobile: never allow sideways scrolling */
+html, body { overflow-x: clip; max-width: 100%; }

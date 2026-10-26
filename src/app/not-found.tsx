@@ -1,7 +1,7 @@
 import Link from "next/link";
 import "@/components/not-found.css";
 
-export const metadata = { title: "Page not found | PrismWeb Labs" };
+export const metadata = { title: "Page not found", robots: { index: false, follow: false } };
 
 export default function NotFound() {
   return (

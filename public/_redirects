@@ -1,0 +1,10 @@
+# 301 redirects (Cloudflare Pages)
+/index.html            /          301
+/home                  /          301
+/home/                 /          301
+/project               /projects  301
+/portfolio             /projects  301
+/privacy-policy        /privacy   301
+/contact               /#contact  301
+/about                 /#about    301
+/services              /#services 301
