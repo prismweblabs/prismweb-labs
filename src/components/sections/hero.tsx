@@ -153,6 +153,7 @@ export function Hero() {
               </button>
             </div>
 
+            <div className="hx-slot">
             {panel === "ready" ? (
               <div className="hx-custom" role="region" aria-label="Ready-made websites">
                 <h3>Ready-made websites</h3>
@@ -185,8 +186,9 @@ export function Hero() {
                 </a>
               </div>
             )}
+            </div>
           </div>
-          <h2 className={`hx-title ${galada.className}`}>
+          <h2 className={`hx-title hx-title-sm ${galada.className}`}>
             <span>Clean</span>
             <br />
             <span className="gr">Code</span>

@@ -90,3 +90,14 @@
 .hx-custom li { display:flex; align-items:center; gap:.5rem; }
 .hx-custom li svg { color:#4ade80; flex:none; }
 @media (max-width:1100px) { .hx-custom { text-align:left; } }
+
+/* fixed-size slot: switching cards never changes the page height, so the logo and "Clean Code" never move */
+.hx-slot { width:min(340px,100%); min-height:360px; display:flex; flex-direction:column; align-items:flex-end; }
+.hx-right .hx-title { margin-top:2rem; }
+/* logo is pinned to the middle of the first screen, whatever the hero height */
+.hx-center { bottom:auto; height:100svh; }
+/* tighter custom panel */
+.hx-custom { padding:1rem 1.1rem; gap:.6rem; }
+.hx-custom p { font-size:.8rem; line-height:1.5; }
+.hx-custom ul { gap:.3rem; font-size:.78rem; }
+@media (max-width:1100px) { .hx-slot { min-height:0; align-items:center; } .hx-right .hx-title { margin-top:1.5rem; } }
