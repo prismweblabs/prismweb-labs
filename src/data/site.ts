@@ -8,7 +8,7 @@ export const site = {
   // Paste your Google Analytics ID here (looks like "G-XXXXXXXXXX"). Leave "" to turn analytics off.
   gaId: "",
   // Paste the Google Search Console HTML-tag verification code here (only the content value). Leave "" if not needed.
-  searchConsole: "",
+  searchConsole: "6JZer7DPAwKPmdWSkdgwqU5CKGdjlYPg3lFyAinN0z0",
 };
 
 export type Developer = {
