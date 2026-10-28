@@ -1,5 +1,5 @@
 import { site } from "@/data/site";
-import { gmailLink } from "@/lib/mail";
+import { EmailLink } from "@/components/email-link";
 
 const links = [
   { label: "Home", href: "/" },
@@ -17,7 +17,7 @@ export function Footer() {
         {links.map((l) => (
           <a key={l.href} href={l.href} className="hover:text-foreground">{l.label}</a>
         ))}
-        <a href={gmailLink(site.email)} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">{site.email}</a>
+        <EmailLink email={site.email} className="hover:text-foreground">{site.email}</EmailLink>
       </nav>
       © {new Date().getFullYear()} {site.name}. All rights reserved.
     </footer>

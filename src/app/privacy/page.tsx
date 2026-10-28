@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { site } from "@/data/site";
-import { gmailLink } from "@/lib/mail";
+import { EmailLink } from "@/components/email-link";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -54,7 +54,7 @@ export default function Privacy() {
       <h2 className={h2}>Your choices</h2>
       <p className="mt-3">
         You can ask us to see, correct or delete the information we hold about you by emailing{" "}
-        <a href={gmailLink(site.email)} target="_blank" rel="noopener noreferrer" className="text-[#4ade80] underline">{site.email}</a>.
+        <EmailLink email={site.email} className="text-[#4ade80] underline">{site.email}</EmailLink>.
       </p>
 
       <h2 className={h2}>Changes</h2>

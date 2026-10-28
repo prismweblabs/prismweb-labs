@@ -1,7 +1,7 @@
 import { Mail } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
 import { site } from "@/data/site";
-import { gmailLink } from "@/lib/mail";
+import { EmailLink } from "@/components/email-link";
 
 export function Contact() {
   return (
@@ -14,10 +14,10 @@ export function Contact() {
           <p className="text-muted-foreground">
             Tell us your name, your email and about your website. We will reply with a plan and a quote.
           </p>
-          <a href={gmailLink(site.email)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 break-all text-sm text-muted-foreground hover:text-foreground">
+          <EmailLink email={site.email} className="inline-flex items-center gap-3 break-all text-sm text-muted-foreground hover:text-foreground">
             <Mail className="h-4 w-4 shrink-0" />
             {site.email}
-          </a>
+          </EmailLink>
         </div>
 
         <ContactForm />
